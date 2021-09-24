@@ -108,7 +108,7 @@ export default {
 
     init() {
       getChestList({
-        company_id: 3, //
+        company_id: this.$route.query.id ? this.$route.query.id : 3, //
         //radius: 1, //查询范围 km
         // lat: 1, //经度 radius 存在时必填
         // lng: 1, //纬度 radius 存在时必填
@@ -126,7 +126,7 @@ export default {
         }
       });
       getFirstAidList({
-        company_id: 3, //公司id
+        company_id: this.$route.query.id ? this.$route.query.id : 3, //公司id
         created_at: "2020-11-04 11:07:32", //查询起始时间
         // after_id: 1, //查询大于id的列表
       }).then((response) => {

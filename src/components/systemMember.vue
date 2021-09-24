@@ -43,7 +43,7 @@ export default {
   methods: {
     init() {
       getsystemMember({
-        company_id: 3, //公司id
+        company_id: this.$route.query.id?this.$route.query.id:3, //公司id
       }).then((response) => {
         const data = response.data;
         if (data.status_code === 200) {
