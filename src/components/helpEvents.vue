@@ -44,55 +44,61 @@
 
 <script>
 import titleName from "@/components/title.vue";
+//import { constants } from "os";
+//import { setTimeout } from "timers/promises";
+import { deepCopy } from "@/utils/deepcopy.js";
 export default {
   name: "",
   props: {
     sosList: {
       type: Array,
       // 对象或数组默认值必须从一个工厂函数获取
-      default: function () {
+      default: function() {
         return [];
-      },
-    },
+      }
+    }
   },
   watch: {
     sosList: {
-      handler: function (val, oldVal) {
+      handler: function(val, oldVal) {
         if (val && val.length > 0) {
-          this.dealInfo(val);
+          let data = deepCopy(val);
+          this.dealInfo(data);
         }
       },
       // 深度观察监听
-      // deep: true,
-      immediate: true, // 初始化的时候执行一次
-    },
+      deep: true,
+      immediate: true // 初始化的时候执行一次
+    }
   },
   data() {
     return {
+      myChart: null,
       allInfo: {
         allNum: 0,
         currentMonthNum: 0,
         currentMonthDealed: 0,
         currentDayNum: 0,
-        currentDayDealed: 0,
-      },
+        currentDayDealed: 0
+      }
     };
   },
   components: { titleName },
   created() {},
   mounted() {
-    this.drawLine();
+    // this.drawLine();
   },
   methods: {
     //处理数据
     dealInfo(val) {
+      console.log("66666666");
       this.$set(this.allInfo, "allNum", val.length);
       let currentMonthNum = 0,
         currentMonthDealed = 0,
         currentDayNum = 0,
         currentDayDealed = 0;
       let listEcharts = [];
-      val.forEach((item) => {
+      val.forEach(item => {
         item.minDiff = this.GetDateDiff(
           item.created_at,
           item.updated_at,
@@ -106,7 +112,7 @@ export default {
         listEcharts.push([
           Math.floor((item.minDiff % 60) / 10),
           item.hourDiff,
-          4,
+          4
         ]);
         //  listEcharts.push([6, 6, 8]);
         // listEcharts.push([3, 7, 4]);
@@ -161,10 +167,25 @@ export default {
       return parseInt((eTime.getTime() - sTime.getTime()) / parseInt(timeType));
     },
     drawLine(list) {
+      console.log(list);
+      console.log("8888888");
+      if (this.myChart) {
+        this.myChart.clear();
+        //this.myChart.dispose();
+        setTimeout(() => {
+          this.myChart.setOption({
+            series: [
+              {
+                data: list
+              }
+            ]
+          });
+        }, 500);
+      }
       // 基于准备好的dom，初始化echarts实例
-      let myChart = this.$echarts.init(document.getElementById("leiChart"));
+      this.myChart = this.$echarts.init(document.getElementById("leiChart"));
       window.addEventListener("resize", () => {
-        myChart.resize();
+        this.myChart.resize();
       });
       // 绘制图表
       var hours = [
@@ -192,12 +213,12 @@ export default {
         20,
         21,
         22,
-        23,
+        23
       ];
       var mins = ["10min", "20min", "30min", "40min", "50min", "60min"];
 
       var data = list;
-      myChart.setOption({
+      this.myChart.setOption({
         polar: {},
         //  backgroundColor: "red",
 
@@ -206,63 +227,63 @@ export default {
           data: hours,
           boundaryGap: false,
           splitLine: {
-            show: true,
+            show: true
           },
           axisLine: {
-            show: true,
+            show: true
           },
           axisLabel: {
-            color: "#fff",
+            color: "#fff"
             // rotate: 45,
           },
           splitArea: {
             show: true,
             areaStyle: {
               color: "#fff",
-              opacity: 0.3,
-            },
-          },
+              opacity: 0.3
+            }
+          }
         },
         radiusAxis: {
           type: "category",
           data: mins,
           splitLine: {
-            show: true,
+            show: true
           },
           axisLine: {
             show: true,
             lineStyle: {
-              color: "#fff",
-            },
+              color: "#fff"
+            }
           },
           axisLabel: {
             interval: 0,
-            color: "#fff",
+            color: "#fff"
 
             // rotate: 45,
-          },
+          }
         },
         series: [
           {
             name: "",
             type: "scatter",
             itemStyle: {
-              shadowColor: "red",
+              shadowColor: "red"
             },
             coordinateSystem: "polar",
-            symbolSize: function (val) {
+            symbolSize: function(val) {
               return val[2] * 2;
             },
             data: data,
 
-            animationDelay: function (idx) {
+            animationDelay: function(idx) {
               return idx * 5;
-            },
-          },
-        ],
+            }
+          }
+        ]
       });
-    },
-  },
+    }
+  }
 };
 </script>
 

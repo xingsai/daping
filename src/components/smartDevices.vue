@@ -18,13 +18,13 @@
       </div>
       <div class="tip-wrap f-a-w">
         <div class="list-one">
-          <div class="name-label f-c-w">
+          <div class="name-label f-c-w"  @click="goOtherLink(2)">
             设备运行中
             <span class="val-wrap equipment">{{ allInfo.runing }}</span>
           </div>
         </div>
         <div class="list-one">
-          <div class="name-label f-c-w">
+          <div class="name-label f-c-w"  @click="goOtherLink(3)">
             设备异常中
             <span class="val-wrap equipment red-text">{{
               allInfo.unnormal
@@ -96,22 +96,22 @@ export default {
     devicesList: {
       type: Array,
       // 对象或数组默认值必须从一个工厂函数获取
-      default: function () {
+      default: function() {
         return [];
-      },
-    },
+      }
+    }
   },
   watch: {
     devicesList: {
-      handler: function (val, oldVal) {
+      handler: function(val, oldVal) {
         if (val && val.length > 0) {
           this.dealInfo(val);
         }
       },
       // 深度观察监听
-      // deep: true,
-      immediate: true, // 初始化的时候执行一次
-    },
+      deep: true,
+      immediate: true // 初始化的时候执行一次
+    }
   },
   data() {
     return {
@@ -120,14 +120,14 @@ export default {
         currentmonth: 0,
         beforemonth: 0,
         runing: 0,
-        unnormal: 0,
+        unnormal: 0
       },
       yearList: [
         { yearnum: "xxxx", allnum: 0, addnum: 0 },
         { yearnum: "xxxx", allnum: 0, addnum: 0 },
-        { yearnum: "xxxx", allnum: 0, addnum: 0 },
+        { yearnum: "xxxx", allnum: 0, addnum: 0 }
       ],
-      maxNum: "",
+      maxNum: ""
     };
   },
   components: { titleName },
@@ -136,6 +136,10 @@ export default {
   },
   mounted() {},
   methods: {
+    goOtherLink(data) {
+      // window.location.href =
+      window.open(window.location.origin + "/admin/cabinets?&status=" + data);
+    },
     dealInfo(list) {
       this.$set(this.allInfo, "allNum", list.length);
       let currentmonthAdd = 0, //当月新增
@@ -150,7 +154,7 @@ export default {
         yearBeforeLastNum = 0, //前年的数量
         yearBeforeLastAddNum = 0; //前年的新增数量
 
-      list.forEach((element) => {
+      list.forEach(element => {
         if (element.created_at) {
           let time = element.created_at.substring(0, 7);
           let creatYear = element.created_at.substring(0, 4) - 0;
@@ -190,17 +194,17 @@ export default {
       this.yearList[0] = {
         yearnum: currentYear,
         allnum: currentYearNum,
-        addnum: currentYearAddNum,
+        addnum: currentYearAddNum
       };
       this.yearList[1] = {
         yearnum: currentYear - 1,
         allnum: beforeYearNum,
-        addnum: beforeYearAddNum,
+        addnum: beforeYearAddNum
       };
       this.yearList[2] = {
         yearnum: currentYear - 2,
         allnum: yearBeforeLastNum,
-        addnum: yearBeforeLastAddNum,
+        addnum: yearBeforeLastAddNum
       };
       this.$set(this.allInfo, "currentmonth", currentmonthAdd);
       this.$set(this.allInfo, "beforemonth", beforemonthAdd);
@@ -232,8 +236,8 @@ export default {
         }
       }
       return max;
-    },
-  },
+    }
+  }
 };
 </script>
 

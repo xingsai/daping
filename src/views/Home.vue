@@ -69,10 +69,11 @@ export default {
     systemMember,
     helpEvents,
     eventsDealList,
-    userInfo,
+    userInfo
   },
   data() {
     return {
+      timer: null,
       devicesList: [], //柜子列表
       sosList: [], //求助列表
       nowTime: "", //
@@ -81,17 +82,20 @@ export default {
       mainBg: {
         backgroundImage: "url(" + require("@/assets/img/pic_bg.png") + ")",
         backgroundRepeat: "no-repeat",
-        backgroundPosition: "center",
+        backgroundPosition: "center"
       },
       titleBg: {
         backgroundImage: "url(" + require("@/assets/img/top_bg.png") + ")",
         backgroundRepeat: "no-repeat",
-        backgroundPosition: "center",
-      },
+        backgroundPosition: "center"
+      }
     };
   },
   created() {
     this.init();
+    this.timer = setInterval(() => {
+      this.init();
+    }, 60 * 1000);
   },
 
   mounted() {
@@ -103,7 +107,8 @@ export default {
   },
   methods: {
     goOtherLink() {
-      window.location.href = window.location.origin + "/admin";
+      //window.location.href = window.location.origin + "/admin";
+      window.open(window.location.origin + "/admin");
     },
 
     init() {
@@ -112,8 +117,8 @@ export default {
         //radius: 1, //查询范围 km
         // lat: 1, //经度 radius 存在时必填
         // lng: 1, //纬度 radius 存在时必填
-        status: 1, //柜子状态 状态 0 已经安装完毕 | 1 已使用 | 2 正常使用 | 3 异常
-      }).then((response) => {
+        status: 1 //柜子状态 状态 0 已经安装完毕 | 1 已使用 | 2 正常使用 | 3 异常
+      }).then(response => {
         const data = response.data;
         console.log(data);
         if (data.status_code === 200) {
@@ -121,33 +126,36 @@ export default {
         } else {
           this.$message({
             message: data.message,
-            type: "warning",
+            type: "warning"
           });
         }
       });
       getFirstAidList({
         company_id: this.$route.query.id ? this.$route.query.id : 3, //公司id
-        created_at: "2020-11-04 11:07:32", //查询起始时间
+        created_at: "2020-11-04 11:07:32" //查询起始时间
         // after_id: 1, //查询大于id的列表
-      }).then((response) => {
+      }).then(response => {
         const data = response.data;
         if (data.status_code === 200) {
           this.sosList = data.data;
         } else {
           this.$message({
             message: data.message,
-            type: "warning",
+            type: "warning"
           });
         }
       });
-    },
+    }
   },
-  beforeDestroy: function () {
+  beforeDestroy() {
     //实例销毁前青出于定时器
     if (this.timeId) {
       clearInterval(this.timeId);
     }
-  },
+    if (this.timer) {
+      clearInterval(this.timer);
+    }
+  }
 };
 </script>
 <style scoped lang="scss">

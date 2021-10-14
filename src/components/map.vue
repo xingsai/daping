@@ -95,10 +95,32 @@ export default {
             var sContent =
               '<div style="width:300px;color:' +
               color +
-              '"><p style="font-size:13px;margin: 5px 0;">序号：' +
+              '"><p style="font-size:13px;margin: 5px 0;">箱子编号：' +
               item.product +
-              '</p><p style="font-size:13px;margin: 5px 0;">地址：' +
+              '</p><p style="font-size:13px;margin: 5px 0;">详细地址：' +
               item.address +
+              '</p><p style="font-size:13px;margin: 5px 0;">所属区域：' +
+              item.system.name +
+              '</p><p style="font-size:13px;margin: 5px 0;">机箱状态：' +
+              (item.patrol_cabinet_status && item.patrol_cabinet_status == 2
+                ? "正常"
+                : "异常 ") +
+              '</p><p style="font-size:13px;margin: 5px 0;">AED状态：' +
+              (item.patrol_aed_status && item.patrol_aed_status == 2
+                ? "正常"
+                : "异常 ") +
+              '</p><p style="font-size:13px;margin: 5px 0;">电池状态：' +
+              (item.patrol_firstAid_status && item.patrol_firstAid_status == 2
+                ? "正常"
+                : "异常 ") +
+              '</p><p style="font-size:13px;margin: 5px 0;">电极片状态：' +
+              (item.patrol_other_status && item.patrol_other_status == 2
+                ? "正常"
+                : "异常 ") +
+              '</p><p style="font-size:13px;margin: 5px 0;">安装时间：' +
+              item.created_at +
+              '</p><p style="font-size:13px;margin: 5px 0;">最近巡检时间：' +
+              item.updated_at +
               "</p>" +
               "</div>";
             var infoWindow = new BMap.InfoWindow(sContent);

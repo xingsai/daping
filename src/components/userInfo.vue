@@ -26,13 +26,14 @@ export default {
   name: "",
   data() {
     return {
+      timer: null,
       allInfo: {
         allNum: 0,
         newUserCount: 0,
         sex0: 0,
         sex1: 0,
-        sex2: 0,
-      },
+        sex2: 0
+      }
     };
   },
   components: { titleName },
@@ -41,10 +42,20 @@ export default {
     //this.drawLine();
     // 初始化页面，获取用户信息
     this.init();
+    this.timer = setInterval(() => {
+      this.init();
+    }, 60 * 1000);
+  },
+  beforeDestroy() {
+    //实例销毁前青出于定时器
+
+    if (this.timer) {
+      clearInterval(this.timer);
+    }
   },
   methods: {
     init() {
-      getUserInfo().then((res) => {
+      getUserInfo().then(res => {
         let data = res.data;
         console.log(data);
         if (data.status_code === 200) {
@@ -63,7 +74,7 @@ export default {
         } else {
           this.$message({
             message: data.message,
-            type: "warning",
+            type: "warning"
           });
         }
       });
@@ -78,7 +89,7 @@ export default {
       myChart.setOption({
         tooltip: {
           trigger: "item",
-          formatter: "{a} <br/>{b}: {c} ({d}%)",
+          formatter: "{a} <br/>{b}: {c} ({d}%)"
         },
         legend: {
           top: "2",
@@ -90,8 +101,8 @@ export default {
           borderRadius: [15, 5, 0, 0],
           // itemStyle: {},
           textStyle: {
-            color: "#fff",
-          },
+            color: "#fff"
+          }
         },
         series: [
           {
@@ -100,54 +111,54 @@ export default {
             radius: [40, 80],
             label: {
               formatter: "{b}\n" + "占比" + "{d}%",
-              color: "#fff",
+              color: "#fff"
             },
             data: [
               {
                 value: this.allInfo.sex1,
                 name: "男",
                 itemStyle: {
-                  color: "#29E0F4",
+                  color: "#29E0F4"
                 },
                 textStyle: {
-                  color: "#fff",
-                },
+                  color: "#fff"
+                }
               },
               {
                 value: this.allInfo.sex2,
                 name: "女",
                 itemStyle: {
-                  color: "#FF126A",
+                  color: "#FF126A"
                 },
 
                 textStyle: {
-                  color: "#fff",
-                },
+                  color: "#fff"
+                }
               },
               {
                 value: this.allInfo.sex0,
                 name: "未知",
                 itemStyle: {
-                  color: "#2096FC",
+                  color: "#2096FC"
                 },
 
                 textStyle: {
-                  color: "#fff",
-                },
-              },
+                  color: "#fff"
+                }
+              }
             ],
             emphasis: {
               itemStyle: {
                 shadowBlur: 10,
                 shadowOffsetX: 0,
-                shadowColor: "rgba(0, 0, 0, 0.5)",
-              },
-            },
-          },
-        ],
+                shadowColor: "rgba(0, 0, 0, 0.5)"
+              }
+            }
+          }
+        ]
       });
-    },
-  },
+    }
+  }
 };
 </script>
 

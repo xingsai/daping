@@ -27,24 +27,35 @@ export default {
   name: "",
   data() {
     return {
+      timer: null,
       memberList: [],
       allInfo: {
         allNum: 1,
         patrolNum: 1,
-        currentmonthAdd: 1,
-      },
+        currentmonthAdd: 1
+      }
     };
   },
   components: { titleName },
   created() {},
   mounted() {
     this.init();
+    this.timer = setInterval(() => {
+      this.init();
+    }, 60 * 1000);
+  },
+  beforeDestroy() {
+    //实例销毁前青出于定时器
+
+    if (this.timer) {
+      clearInterval(this.timer);
+    }
   },
   methods: {
     init() {
       getsystemMember({
-        company_id: this.$route.query.id?this.$route.query.id:3, //公司id
-      }).then((response) => {
+        company_id: this.$route.query.id ? this.$route.query.id : 3 //公司id
+      }).then(response => {
         const data = response.data;
         if (data.status_code === 200) {
           this.memberList = data.data;
@@ -54,7 +65,7 @@ export default {
           let peopleType1 = 0; ////0 运维  1志愿者 2，导师
           let peopleType2 = 0; ////0 运维  1志愿者 2，导师
 
-          this.memberList.forEach((item) => {
+          this.memberList.forEach(item => {
             if (item.attribute === 0) {
               peopleType0++;
             }
@@ -84,7 +95,7 @@ export default {
         } else {
           this.$message({
             message: data.message,
-            type: "warning",
+            type: "warning"
           });
         }
       });
@@ -99,7 +110,7 @@ export default {
       myChart.setOption({
         tooltip: {
           trigger: "item",
-          formatter: "{a} <br/>{b}: {c} ({d}%)",
+          formatter: "{a} <br/>{b}: {c} ({d}%)"
         },
         legend: {
           top: "2",
@@ -111,8 +122,8 @@ export default {
           borderRadius: [15, 5, 0, 0],
           // itemStyle: {},
           textStyle: {
-            color: "#fff",
-          },
+            color: "#fff"
+          }
         },
         series: [
           {
@@ -121,54 +132,54 @@ export default {
             radius: "50%",
             label: {
               formatter: "{b}\n" + "占比" + "{d}%",
-              color: "#fff",
+              color: "#fff"
             },
             data: [
               {
                 value: val0,
                 name: "普通成员",
                 itemStyle: {
-                  color: "#29E0F4",
+                  color: "#29E0F4"
                 },
                 textStyle: {
-                  color: "#fff",
-                },
+                  color: "#fff"
+                }
               },
               {
                 value: val1,
                 name: "急救志愿者",
                 itemStyle: {
-                  color: "#FF126A",
+                  color: "#FF126A"
                 },
 
                 textStyle: {
-                  color: "#fff",
-                },
+                  color: "#fff"
+                }
               },
               {
                 value: val2,
                 name: "急救导师",
                 itemStyle: {
-                  color: "#2096FC",
+                  color: "#2096FC"
                 },
 
                 textStyle: {
-                  color: "#fff",
-                },
-              },
+                  color: "#fff"
+                }
+              }
             ],
             emphasis: {
               itemStyle: {
                 shadowBlur: 10,
                 shadowOffsetX: 0,
-                shadowColor: "rgba(0, 0, 0, 0.5)",
-              },
-            },
-          },
-        ],
+                shadowColor: "rgba(0, 0, 0, 0.5)"
+              }
+            }
+          }
+        ]
       });
-    },
-  },
+    }
+  }
 };
 </script>
 

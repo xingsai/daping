@@ -36,28 +36,30 @@
 <script>
 import titleName from "@/components/title.vue";
 import myPagenation from "@/components/myPagenation.vue";
+import { deepCopy } from "@/utils/deepcopy.js";
 export default {
   name: "",
   props: {
     sosList: {
       type: Array,
       // 对象或数组默认值必须从一个工厂函数获取
-      default: function () {
+      default: function() {
         return [];
-      },
-    },
+      }
+    }
   },
   watch: {
     sosList: {
-      handler: function (val, oldVal) {
+      handler: function(val, oldVal) {
         if (val && val.length > 0) {
-          this.dealInfo(val);
+          let data = deepCopy(val);
+          this.dealInfo(data);
         }
       },
       // 深度观察监听
       // deep: true,
-      immediate: true, // 初始化的时候执行一次
-    },
+      immediate: true // 初始化的时候执行一次
+    }
   },
   data() {
     return {
@@ -66,7 +68,7 @@ export default {
       totals: "",
       tableList: [], //所有的数据
       showList: [], //要展示的数据
-      dealList: [], //处理过的数据【【】，【】】
+      dealList: [] //处理过的数据【【】，【】】
     };
   },
   components: { titleName, myPagenation },
@@ -86,11 +88,6 @@ export default {
       }
       let flag = 0;
       this.int = setInterval(() => {
-        console.log(this.$refs.scrollWrap.scrollTop);
-        console.log(this.$refs.scrollWrap.clientHeight);
-        console.log(this.$refs.scrollWrap.offsetHeight);
-        console.log(this.$refs.scrollWrap.scrollHeight);
-        console.log(this.$refs.scrollinnerWrap.scrollHeight);
         //+1  特殊处理，精度问题
         if (
           this.$refs.scrollWrap.scrollTop +
@@ -98,7 +95,6 @@ export default {
             1 >=
           this.$refs.scrollinnerWrap.scrollHeight
         ) {
-          console.log(1112222222);
           //当条数不够滚动的时候
           if (
             this.$refs.scrollWrap.clientHeight >=
@@ -131,7 +127,7 @@ export default {
       var geoc = new BMap.Geocoder();
       return new Promise((resolve, reject) => {
         var address = "";
-        geoc.getLocation(point, (rs) => {
+        geoc.getLocation(point, rs => {
           var _value = rs.addressComponents;
           var province = _value.province;
           var city = _value.city;
@@ -155,14 +151,12 @@ export default {
     //数据处理
     dealInfo(val) {
       this.tableList = val;
-      this.tableList.forEach((item) => {
+      this.tableList.forEach(item => {
         if (item.lng && item.lat) {
-          this.reset_location(new BMap.Point(item.lng, item.lat)).then(
-            (res) => {
-              //item.address = res;
-              this.$set(item, "address", res);
-            }
-          );
+          this.reset_location(new BMap.Point(item.lng, item.lat)).then(res => {
+            //item.address = res;
+            this.$set(item, "address", res);
+          });
         } else {
           item.address = "";
         }
@@ -176,8 +170,8 @@ export default {
       this.$nextTick(() => {
         this.scrollSet();
       });
-    },
-  },
+    }
+  }
 };
 </script>
 
