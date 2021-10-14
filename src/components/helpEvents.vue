@@ -37,8 +37,10 @@
     <div class="txt-style" style="margin-top: 3%">
       发起求助时间与响应求助时间
     </div>
-
-    <div id="leiChart" :style="{ width: '100%', height: '100%' }"></div>
+    <div class="f-c-w" style="width:100%;flex:1;" ref="chartBox">
+        <div id="leiChart" ref="chartBox" :style="{ width: boxHeight, height: boxHeight }"></div>
+    </div>
+   
   </div>
 </template>
 
@@ -73,6 +75,7 @@ export default {
   },
   data() {
     return {
+      boxHeight: "",
       myChart: null,
       allInfo: {
         allNum: 0,
@@ -86,9 +89,23 @@ export default {
   components: { titleName },
   created() {},
   mounted() {
+    this.setSize();
     // this.drawLine();
   },
   methods: {
+    setSize() {
+      // console.log(this.$refs.chartBox.clientHeight);
+      // console.log(this.$refs.chartBox.clientWidth);
+      // console.log(555555555);
+      let pxNum =
+        Math.floor(
+          (this.$refs.chartBox.clientWidth >= this.$refs.chartBox.clientHeight
+            ? this.$refs.chartBox.clientHeight
+            : this.$refs.chartBox.clientWidth) / 42
+        ) * 42;
+      this.boxHeight = pxNum + "px";
+      console.log(this.boxHeight);
+    },
     //处理数据
     dealInfo(val) {
       console.log("66666666");
@@ -167,8 +184,6 @@ export default {
       return parseInt((eTime.getTime() - sTime.getTime()) / parseInt(timeType));
     },
     drawLine(list) {
-      console.log(list);
-      console.log("8888888");
       if (this.myChart) {
         this.myChart.clear();
         //this.myChart.dispose();
@@ -185,6 +200,7 @@ export default {
       // 基于准备好的dom，初始化echarts实例
       this.myChart = this.$echarts.init(document.getElementById("leiChart"));
       window.addEventListener("resize", () => {
+        this.setSize();
         this.myChart.resize();
       });
       // 绘制图表
