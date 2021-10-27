@@ -18,22 +18,22 @@ export default {
     devicesList: {
       type: Array,
       // 对象或数组默认值必须从一个工厂函数获取
-      default: function () {
+      default: function() {
         return [];
-      },
-    },
+      }
+    }
   },
   watch: {
     devicesList: {
-      handler: function (val, oldVal) {
+      handler: function(val, oldVal) {
         if (val && val.length > 0) {
           this.baiduMap();
         }
       },
       // 深度观察监听
       // deep: true,
-      immediate: true, // 初始化的时候执行一次
-    },
+      immediate: true // 初始化的时候执行一次
+    }
   },
   data() {
     return {};
@@ -53,10 +53,10 @@ export default {
       map.enableScrollWheelZoom(true); //开启鼠标滚轮缩放
       map.clearOverlays();
       var myIcon1 = new BMap.Icon(locationIcon1, new BMap.Size(52, 50), {
-        imageSize: new BMap.Size(40, 44),
+        imageSize: new BMap.Size(40, 44)
       });
       var myIcon2 = new BMap.Icon(locationIcon2, new BMap.Size(52, 50), {
-        imageSize: new BMap.Size(40, 44),
+        imageSize: new BMap.Size(40, 44)
       });
 
       this.devicesList.forEach((item, index) => {
@@ -66,13 +66,13 @@ export default {
 
         var point = new BMap.Point(item.lng, item.lat); // 创建点坐标
         var marker = new BMap.Marker(point, {
-          icon: item.status == 2 ? myIcon2 : myIcon1,
+          icon: item.status == 2 ? myIcon2 : myIcon1
         });
         map.addOverlay(marker);
         // //点击图标时候调用信息窗口
 
         marker.addEventListener("click", () => {
-          this.setMark(item.id).then((res) => {
+          this.setMark(item.id).then(res => {
             console.log(11111);
             console.log(res);
             let goods = res.data.data.goods;
@@ -136,8 +136,8 @@ export default {
       } else {
         map.centerAndZoom(new BMap.Point(116.404, 39.915), 18); // 初始化地图，设置中心点坐标和地图级别
       }
-    },
-  },
+    }
+  }
 };
 </script>
 <style scoped>
